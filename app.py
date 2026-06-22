@@ -326,9 +326,16 @@ img { max-width: 100%; height: auto; }
 }
 
 .skill-cat-icon {
-    font-size: 28px;
-    margin-bottom: 12px;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 14px;
     display: block;
+    color: #818CF8;
+}
+
+.skill-cat-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .skill-cat-title {
@@ -763,20 +770,36 @@ PROFILE = {
     "email": "g.henriquequeiroz2003@gmail.com",
 }
 
-SKILLS = {
-    "🐍  Python & Análise": ["Python", "Pandas", "NumPy", "Plotly", "Streamlit", "Jupyter"],
-    "🗄️  Banco de Dados": ["SQL", "PostgreSQL", "DuckDB", "SQLite", "Parquet"],
-    "📊  Visualização & BI": ["Power BI", "Plotly", "Matplotlib", "Seaborn", "Streamlit"],
-    "⚙️  Engenharia de Dados": ["ETL / ELT", "Parquet", "Data Modeling", "Git / GitHub"],
-    "☁️  Cloud & Deploy": ["Streamlit Cloud", "GitHub Actions", "Linux"],
-    "🧠  Análise & Estatística": ["Análise Exploratória", "K-Means", "Séries Temporais", "KPIs"],
-    "📈  Power BI": ["DAX Avançado", "Modelagem Dimensional", "Power Query", "KPIs de Gestão", "Governança de Dados"],
-    "⚡  Power Automate": ["Automação de Processos", "Fluxos de Aprovação", "Integração Microsoft 365", "Eliminação de Tarefas Manuais"],
+# Ícones em SVG puro — evita depender de fonte de emoji do sistema/navegador,
+# que pode renderizar como glifo quebrado ("código solto") em alguns ambientes.
+ICONS = {
+    "code": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>',
+    "database": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>',
+    "gear": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.97 7.97 0 0 0 0-2l2-1.5-2-3.4-2.4 1a8 8 0 0 0-1.7-1L15 3h-4l-.3 2.6a8 8 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.5a8 8 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a8 8 0 0 0 1.7 1L11 21h4l.3-2.6a8 8 0 0 0 1.7-1l2.4 1 2-3.4-2-1.5Z"/></svg>',
+    "cloud": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6.5 19a4.5 4.5 0 0 1 0-9 6 6 0 0 1 11.6-1.6A4 4 0 0 1 17.5 16H6.5Z"/></svg>',
+    "pulse": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 8 12 11 19 14 5 17 12 21 12"/></svg>',
+    "trending-up": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>',
+    "brain": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M9 2.5a3.5 3.5 0 0 0-3.4 4.3A3.5 3.5 0 0 0 4 10c0 1.1.5 2 1.3 2.7A3 3 0 0 0 5 14c0 1.5 1.1 2.7 2.5 2.9V19a2.5 2.5 0 0 0 5 0V5.5A3 3 0 0 0 9 2.5Z"/><path d="M15 2.5a3.5 3.5 0 0 1 3.4 4.3A3.5 3.5 0 0 1 20 10c0 1.1-.5 2-1.3 2.7.2.4.3.8.3 1.3 0 1.5-1.1 2.7-2.5 2.9V19a2.5 2.5 0 0 1-5 0V5.5A3 3 0 0 1 15 2.5Z"/></svg>',
+    "heart": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.8 8.6c0 4-8.8 9.4-8.8 9.4S3.2 12.6 3.2 8.6A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8.8 2.6Z"/></svg>',
+    "map-pin": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="11" r="2.5"/></svg>',
+    "palette": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c.6 0 1-.4 1-1 0-.3-.1-.5-.3-.7-.2-.2-.3-.5-.3-.8 0-.6.4-1 1-1h1.6A4.7 4.7 0 0 0 20 12.7 9 9 0 0 0 12 3Z"/><circle cx="7.5" cy="10.5" r="1.1" fill="currentColor"/><circle cx="11" cy="7.5" r="1.1" fill="currentColor"/><circle cx="15" cy="8.5" r="1.1" fill="currentColor"/><circle cx="16.5" cy="12.5" r="1.1" fill="currentColor"/></svg>',
+    "bot": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><circle cx="9" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1" fill="currentColor" stroke="none"/><path d="M12 9V5"/><circle cx="12" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><path d="M3 13h2"/><path d="M19 13h2"/></svg>',
+    "zap": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
 }
+
+SKILLS = [
+    {"icon": "code", "title": "Python & Análise", "tags": ["Python", "Pandas", "NumPy", "Plotly", "Streamlit", "Jupyter"]},
+    {"icon": "database", "title": "Banco de Dados", "tags": ["SQL", "PostgreSQL", "DuckDB", "SQLite", "Parquet"]},
+    {"icon": "gear", "title": "Engenharia de Dados", "tags": ["ETL / ELT", "Parquet", "Data Modeling", "Git / GitHub"]},
+    {"icon": "cloud", "title": "Cloud & Deploy", "tags": ["Streamlit Cloud", "GitHub Actions", "Linux"]},
+    {"icon": "pulse", "title": "Análise & Estatística", "tags": ["Análise Exploratória", "K-Means", "Séries Temporais", "KPIs"]},
+    {"icon": "trending-up", "title": "Business Intelligence", "tags": ["Power BI", "DAX Avançado", "Power Query", "Modelagem Dimensional", "Power Automate", "KPIs de Gestão"]},
+    {"icon": "brain", "title": "Inteligência Artificial", "tags": ["Machine Learning", "IA Generativa", "Prompt Engineering", "Automação Inteligente", "Análise Preditiva"]},
+]
 
 POWERBI_HIGHLIGHTS = [
     {
-        "icon": "🏥",
+        "icon": "heart",
         "title": "Arquitetura de Dados em Nuvem para Saúde Pública (SUS)",
         "desc": (
             "Projeto acadêmico em equipe utilizando Microsoft Fabric para todo o processo de ETL "
@@ -788,7 +811,7 @@ POWERBI_HIGHLIGHTS = [
         "url": "https://www.linkedin.com/posts/gian-henrique_pucminas-powerbi-etl-ugcPost-7382929412842835968-U43x/",
     },
     {
-        "icon": "🐍",
+        "icon": "map-pin",
         "title": "Cálculo de Cidades Dentro de um Raio com Python para o Power BI",
         "desc": (
             "Em um projeto, precisei desenhar um raio no Power BI e não encontrei uma opção nativa "
@@ -807,7 +830,7 @@ POWERBI_HIGHLIGHTS = [
         "url": "https://www.linkedin.com/posts/gian-henrique_ol%C3%A1-provavelmente-voc%C3%AA-deve-estar-se-perguntando-ugcPost-7239805669359386625-gBvh/",
     },
     {
-        "icon": "🎨",
+        "icon": "palette",
         "title": "Dashboard Comparativo: Auxílio Brasil x Bolsa Família",
         "desc": (
             "Reformulação em equipe de um dashboard comparativo entre os programas Auxílio Brasil e "
@@ -820,7 +843,7 @@ POWERBI_HIGHLIGHTS = [
         "url": "https://www.linkedin.com/posts/gian-henrique_bom-gente-est%C3%A1-ai-o-resultado-final-neste-ugcPost-7137973119444594688-DHkf/",
     },
     {
-        "icon": "🤖",
+        "icon": "bot",
         "title": "Automação de Planilhas Excel com Inteligência Artificial",
         "desc": (
             "Uso de IA generativa para acelerar rotinas em Excel — criação assistida de fórmulas, "
@@ -836,7 +859,7 @@ POWERBI_HIGHLIGHTS = [
 PROJECTS = [
     {
         "title": "Dashboard Executivo — Acidentes de Trânsito (PRF)",
-        "status": "Em produção",
+        "status": "Finalizado",
         "desc": (
             "Dashboard interativo completo para análise de acidentes em rodovias federais "
             "brasileiras (2022–2025). Pipeline ETL que processa ~350 MB de CSVs da PRF para "
@@ -1037,7 +1060,7 @@ col_chart, col_tags = st.columns([1, 1], gap="large")
 
 with col_chart:
     categories = ["Python", "SQL", "ETL", "BI / Viz", "Estatística", "Git"]
-    values = [90, 80, 85, 88, 75, 82]
+    values = [70, 85, 85, 95, 75, 70]
 
     fig = go.Figure()
     fig.add_trace(go.Scatterpolar(
@@ -1075,12 +1098,12 @@ with col_chart:
 
 with col_tags:
     skills_html = '<div class="skills-grid" style="grid-template-columns: repeat(2,1fr); margin-top:0">'
-    for cat, tags in SKILLS.items():
-        tags_html = "".join(f'<span class="skill-tag">{t}</span>' for t in tags)
+    for cat in SKILLS:
+        tags_html = "".join(f'<span class="skill-tag">{t}</span>' for t in cat["tags"])
         skills_html += f"""
         <div class="skill-category">
-          <span class="skill-cat-icon">{cat.split()[0]}</span>
-          <div class="skill-cat-title">{" ".join(cat.split()[1:])}</div>
+          <span class="skill-cat-icon">{ICONS[cat['icon']]}</span>
+          <div class="skill-cat-title">{cat['title']}</div>
           {tags_html}
         </div>
         """
@@ -1111,7 +1134,7 @@ for item in POWERBI_HIGHLIGHTS:
     )
     cards_html += f"""
     <div class="linkedin-card">
-      <span class="skill-cat-icon">{item['icon']}</span>
+      <span class="skill-cat-icon">{ICONS[item['icon']]}</span>
       <div class="linkedin-card-title">{item['title']}</div>
       <div class="linkedin-card-desc">{item['desc']}</div>
       {steps_html}
@@ -1237,6 +1260,65 @@ with col2:
 
 st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
+# Resultado do projeto SUS — ilustração baseada na documentação (etapas 5 e 6 do projeto)
+st.markdown("""
+<div class="section-alt">
+  <div class="section-inner">
+    <div class="section-label">Projeto em Ação</div>
+    <h3 style="color:#F1F5F9;font-size:22px;font-weight:600;margin-bottom:4px">Resultado: Envelhecimento Populacional e Impactos no SUS</h3>
+    <p style="color:#64748B;font-size:14px;margin-bottom:24px">Ilustração baseada nas etapas de Análise dos Resultados e Otimização documentadas no projeto — valores representativos da metodologia aplicada.</p>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+col_sus1, col_sus2 = st.columns(2, gap="medium")
+
+with col_sus1:
+    faixas = ["60–69 anos", "70–79 anos", "80+ anos"]
+    proporcao = [38, 34, 28]
+
+    fig4 = go.Figure(go.Bar(
+        x=faixas, y=proporcao,
+        marker_color="#F43F5E",
+        hovertemplate="%{x}: %{y}% dos óbitos<extra></extra>",
+        text=[f"{v}%" for v in proporcao],
+        textposition="outside",
+        textfont=dict(color="#94A3B8", size=12),
+    ))
+    fig4.update_layout(
+        title=dict(text="Distribuição de Óbitos por Faixa Etária 60+ (%)", font=dict(color="#E2E8F0", size=14)),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(26,26,46,0.6)",
+        xaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#94A3B8")),
+        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B"), showticklabels=False),
+        margin=dict(l=10, r=10, t=48, b=10),
+        height=320,
+    )
+    st.plotly_chart(fig4, use_container_width=True, config={"displayModeBar": False})
+
+with col_sus2:
+    bases = ["Mortalidade<br>(faixa etária + CID-10)", "Ambulatorial<br>(município)", "Internações<br>(município)"]
+    relevancia = [82, 76, 54]
+
+    fig5 = go.Figure(go.Bar(
+        x=relevancia, y=bases, orientation="h",
+        marker=dict(color=relevancia, colorscale=[[0, "#2D2D4E"], [1, "#6366F1"]]),
+        hovertemplate="%{y}: relevância %{x}<extra></extra>",
+        text=[f"{v}" for v in relevancia],
+        textposition="outside",
+        textfont=dict(color="#94A3B8", size=12),
+    ))
+    fig5.update_layout(
+        title=dict(text="Principal Determinante por Base de Dados", font=dict(color="#E2E8F0", size=14)),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(26,26,46,0.6)",
+        xaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B"), showticklabels=False),
+        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#94A3B8"), automargin=True),
+        margin=dict(l=10, r=50, t=48, b=10),
+        height=320,
+    )
+    st.plotly_chart(fig5, use_container_width=True, config={"displayModeBar": False})
+
+st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
+
 
 # ─────────────────────────────────────────
 # EXPERIÊNCIA
@@ -1313,7 +1395,7 @@ st.markdown(f"""
           <div class="contact-value">github.com/GianHQA</div>
         </div>
       </a>
-      <a href="https://wa.me/55" class="contact-card">
+      <a href="https://wa.me/5531995560604" class="contact-card">
         <div class="contact-icon">📱</div>
         <div>
           <div class="contact-label">WhatsApp / Localização</div>
