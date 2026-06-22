@@ -1,3 +1,6 @@
+import base64
+from pathlib import Path
+
 import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
@@ -705,6 +708,10 @@ html, body, [class*="css"] {
     .project-header, .project-body { padding: 20px; }
     .project-name { font-size: 18px; }
 
+    .linkedin-card { padding: 18px; }
+    .linkedin-card-title { font-size: 14px; }
+    .linkedin-card-desc { font-size: 12px; }
+
     .timeline { padding-left: 20px; }
     .timeline-item { padding: 0 0 32px 24px; }
     .timeline-role { font-size: 16px; }
@@ -720,10 +727,21 @@ html, body, [class*="css"] {
 # ─────────────────────────────────────────
 # DADOS DO PERFIL
 # ─────────────────────────────────────────
+def _load_local_avatar():
+    assets_dir = Path(__file__).parent / "assets"
+    for name in ("avatar.jpg", "avatar.jpeg", "avatar.png"):
+        path = assets_dir / name
+        if path.exists():
+            mime = "jpeg" if path.suffix in (".jpg", ".jpeg") else "png"
+            encoded = base64.b64encode(path.read_bytes()).decode()
+            return f"data:image/{mime};base64,{encoded}"
+    return None
+
+
 PROFILE = {
     "name": "Gian Henrique",
     "title": "Analista de Dados • Python • SQL • BI",
-    "avatar": "https://avatars.githubusercontent.com/u/135023573?v=4",
+    "avatar": _load_local_avatar() or "https://avatars.githubusercontent.com/u/135023573?v=4",
     "bio": (
         "Analista de Dados apaixonado por transformar grandes volumes de dados em decisões "
         "estratégicas de alto impacto. Especializado em pipelines ETL, dashboards interativos e "
@@ -749,42 +767,58 @@ SKILLS = {
 
 POWERBI_HIGHLIGHTS = [
     {
+        "icon": "🏥",
         "title": "Arquitetura de Dados em Nuvem para Saúde Pública (SUS)",
         "desc": (
             "Projeto acadêmico em equipe utilizando Microsoft Fabric para todo o processo de ETL "
             "e análise de dados, com dashboards em Power BI para apoiar políticas públicas a partir "
             "de tendências de mortalidade, internações e atendimentos ambulatoriais."
         ),
+        "steps": [],
         "tags": ["Power BI", "Microsoft Fabric", "ETL", "PUC Minas"],
         "url": "https://www.linkedin.com/posts/gian-henrique_pucminas-powerbi-etl-ugcPost-7382929412842835968-U43x/",
     },
     {
-        "title": "Cálculo de Raio Geográfico com Python para Mapas no Power BI",
+        "icon": "🐍",
+        "title": "Cálculo de Cidades Dentro de um Raio com Python para o Power BI",
         "desc": (
-            "Solução em Python (Geopy + Pandas) para identificar cidades dentro de um raio "
-            "geográfico, contornando limitações nativas do Power BI e exportando os dados tratados "
-            "para visualização em mapa dentro do BI."
+            "Em um projeto, precisei desenhar um raio no Power BI e não encontrei uma opção nativa "
+            "que atendesse — então resolvi com Python orientado por IA. Solução para calcular cidades "
+            "dentro de um raio (neste exemplo, 600 km) a partir de um ponto de referência, útil para "
+            "logística, marketing geográfico ou planejamento urbano."
         ),
-        "tags": ["Python", "Geopy", "Pandas", "Power BI"],
+        "steps": [
+            "Definir as coordenadas do ponto de referência (Manaus, no exemplo)",
+            "Carregar um dataset de cidades com latitude e longitude",
+            "Calcular a distância com a função geodesic da biblioteca Geopy",
+            "Filtrar as cidades dentro do raio de 600 km",
+            "Exportar o resultado para Excel e visualizar o raio no mapa do Power BI",
+        ],
+        "tags": ["Python", "Geopy", "Pandas", "OpenPyXL", "Power BI"],
         "url": "https://www.linkedin.com/posts/gian-henrique_ol%C3%A1-provavelmente-voc%C3%AA-deve-estar-se-perguntando-ugcPost-7239805669359386625-gBvh/",
     },
     {
-        "title": "Redesign de Dashboard com Figma e Tooltips Analíticos",
+        "icon": "🎨",
+        "title": "Dashboard Comparativo: Auxílio Brasil x Bolsa Família",
         "desc": (
-            "Reformulação de layout de dashboard em equipe, refazendo o design no Figma e "
-            "acrescentando dicas de ferramenta (tooltips) para aprofundar a análise dos dados "
-            "diretamente no Power BI."
+            "Reformulação em equipe de um dashboard comparativo entre os programas Auxílio Brasil e "
+            "Bolsa Família. Refizemos o layout utilizando o Figma e acrescentamos dicas de ferramenta "
+            "(tooltips) no Power BI para aprofundar a análise de distribuição de parcelas, "
+            "benefícios e total de pessoas por região e UF."
         ),
+        "steps": [],
         "tags": ["Power BI", "Figma", "UX para Dados"],
         "url": "https://www.linkedin.com/posts/gian-henrique_bom-gente-est%C3%A1-ai-o-resultado-final-neste-ugcPost-7137973119444594688-DHkf/",
     },
     {
+        "icon": "🤖",
         "title": "Automação de Planilhas Excel com Inteligência Artificial",
         "desc": (
             "Uso de IA generativa para acelerar rotinas em Excel — criação assistida de fórmulas, "
             "scripts e macros (VBA/Office Scripts), reduzindo o tempo manual em relatórios "
             "recorrentes e aumentando a confiabilidade das planilhas."
         ),
+        "steps": [],
         "tags": ["Excel", "VBA", "IA Generativa", "Automação"],
         "url": None,
     },
@@ -1055,6 +1089,12 @@ st.markdown("""
 cards_html = '<div class="linkedin-grid">'
 for item in POWERBI_HIGHLIGHTS:
     tags_html = "".join(f'<span class="skill-tag">{t}</span>' for t in item["tags"])
+    steps_html = (
+        '<ol style="padding-left:18px;margin:0 0 14px;color:#94A3B8;font-size:12px;line-height:1.7">'
+        + "".join(f"<li>{s}</li>" for s in item["steps"])
+        + "</ol>"
+        if item["steps"] else ""
+    )
     link_html = (
         f'<a href="{item["url"]}" target="_blank" class="linkedin-card-link">🔗 Ver no LinkedIn →</a>'
         if item["url"] else
@@ -1062,8 +1102,10 @@ for item in POWERBI_HIGHLIGHTS:
     )
     cards_html += f"""
     <div class="linkedin-card">
+      <span class="skill-cat-icon">{item['icon']}</span>
       <div class="linkedin-card-title">{item['title']}</div>
       <div class="linkedin-card-desc">{item['desc']}</div>
+      {steps_html}
       <div class="linkedin-card-tags">{tags_html}</div>
       {link_html}
     </div>
