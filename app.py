@@ -460,6 +460,9 @@ img { max-width: 100%; height: auto; }
     transition: all 0.2s;
     display: flex;
     flex-direction: column;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .linkedin-card:hover {
@@ -494,15 +497,47 @@ img { max-width: 100%; height: auto; }
 .linkedin-card-link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    color: #818CF8 !important;
+    gap: 8px;
+    align-self: flex-start;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.3);
+    color: #A5B4FC !important;
     text-decoration: none !important;
     font-size: 13px;
-    font-weight: 500;
-    transition: gap 0.2s;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 50px;
+    transition: all 0.2s;
 }
 
-.linkedin-card-link:hover { gap: 10px; }
+.linkedin-card-link:hover {
+    background: rgba(99,102,241,0.22);
+    border-color: rgba(99,102,241,0.5);
+    transform: translateY(-1px);
+}
+
+.linkedin-card-link-disabled {
+    background: transparent;
+    border-color: #2D2D4E;
+    color: #64748B !important;
+    cursor: default;
+}
+
+.linkedin-card-link-disabled:hover {
+    background: transparent;
+    transform: none;
+}
+
+.linkedin-card-link-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.linkedin-card-link-icon svg {
+    width: 100%;
+    height: 100%;
+}
 
 /* ── PROJECT CARDS ── */
 .project-card {
@@ -924,6 +959,7 @@ ICONS = {
     "palette": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c.6 0 1-.4 1-1 0-.3-.1-.5-.3-.7-.2-.2-.3-.5-.3-.8 0-.6.4-1 1-1h1.6A4.7 4.7 0 0 0 20 12.7 9 9 0 0 0 12 3Z"/><circle cx="7.5" cy="10.5" r="1.1" fill="currentColor"/><circle cx="11" cy="7.5" r="1.1" fill="currentColor"/><circle cx="15" cy="8.5" r="1.1" fill="currentColor"/><circle cx="16.5" cy="12.5" r="1.1" fill="currentColor"/></svg>',
     "bot": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><circle cx="9" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1" fill="currentColor" stroke="none"/><path d="M12 9V5"/><circle cx="12" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><path d="M3 13h2"/><path d="M19 13h2"/></svg>',
     "zap": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    "linkedin": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M4.5 3.5A2.5 2.5 0 1 0 4.5 8.5 2.5 2.5 0 0 0 4.5 3.5Z"/><rect x="2.5" y="9.5" width="4" height="12"/><path d="M10.5 9.5h4v2c.9-1.5 2.4-2.4 4.2-2.4 3.5 0 4.8 2.4 4.8 6V21.5h-4v-5.4c0-1.5-.5-2.6-1.9-2.6-1.1 0-1.8.8-2.1 1.5-.1.3-.1.6-.1 1v5.5h-4Z"/></svg>',
 }
 
 SKILLS = [
@@ -1279,14 +1315,19 @@ with col_tags:
     st.markdown(skills_html, unsafe_allow_html=True)
 
 # Power BI na prática — experiências compartilhadas no LinkedIn
-st.markdown("""
+# IMPORTANTE: todo o bloco (cabeçalho + cards) é montado em UMA única string e
+# enviado em UMA única chamada st.markdown(). Cada chamada a st.markdown() é
+# inserida como um nó de DOM independente — abrir uma div numa chamada e
+# fechá-la só numa chamada seguinte não funciona (as divs órfãs de uma
+# chamada não “casam” com fechamentos de outra), o que fazia o HTML aparecer
+# como texto bruto na tela.
+cards_html = """
 <div class="section-alt" style="padding-top:0">
   <div class="section-inner">
     <h3 style="color:#E2E8F0;font-size:18px;font-weight:600;margin:8px 0 4px">Power BI na Prática</h3>
     <p style="color:#64748B;font-size:14px;margin-bottom:0">Experiências reais compartilhadas no LinkedIn.</p>
-""", unsafe_allow_html=True)
-
-cards_html = '<div class="linkedin-grid">'
+    <div class="linkedin-grid">
+"""
 for item in POWERBI_HIGHLIGHTS:
     tags_html = "".join(f'<span class="skill-tag">{t}</span>' for t in item["tags"])
     steps_html = (
@@ -1296,9 +1337,11 @@ for item in POWERBI_HIGHLIGHTS:
         if item["steps"] else ""
     )
     link_html = (
-        f'<a href="{item["url"]}" target="_blank" class="linkedin-card-link">🔗 Ver no LinkedIn →</a>'
+        f'<a href="{item["url"]}" target="_blank" class="linkedin-card-link">'
+        f'<span class="linkedin-card-link-icon">{ICONS["linkedin"]}</span>Ver Projeto</a>'
         if item["url"] else
-        '<span class="linkedin-card-link" style="color:#64748B !important">💡 Aplicação prática contínua</span>'
+        '<span class="linkedin-card-link linkedin-card-link-disabled">'
+        f'<span class="linkedin-card-link-icon">{ICONS["bot"]}</span>Aplicação prática contínua</span>'
     )
     cards_html += f"""
     <div class="linkedin-card">
