@@ -375,6 +375,12 @@ html, body, [class*="css"] {
     margin-bottom: 14px;
 }
 
+.project-badge.finalizado {
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.35);
+    color: #A5B4FC;
+}
+
 .project-name {
     font-size: 22px;
     font-weight: 700;
@@ -588,6 +594,64 @@ html, body, [class*="css"] {
     background: linear-gradient(to right, transparent, #2D2D4E, transparent);
     margin: 0 40px;
 }
+
+/* ── RESPONSIVE: TABLET ── */
+@media (max-width: 900px) {
+    .hero-section { padding: 56px 24px 40px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 28px; text-align: center; }
+    .hero-grid > div:first-child { order: 2; }
+    .hero-grid > div:last-child { order: 1; display: flex; justify-content: center; }
+    .hero-links { justify-content: center; }
+    .hero-bio { margin: 0 auto 36px; }
+    .hero-name { font-size: 40px; }
+    .hero-avatar { width: 140px; height: 140px; }
+
+    .nav-container { padding: 0 16px; overflow-x: auto; }
+    .nav-pills { gap: 4px; }
+    .nav-pill { padding: 14px 12px; font-size: 13px; white-space: nowrap; }
+
+    .section, .section-alt { padding: 48px 24px; }
+    .section-title { font-size: 28px; }
+
+    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .skills-grid { grid-template-columns: 1fr !important; }
+    .project-metrics { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .contact-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ── RESPONSIVE: MOBILE ── */
+@media (max-width: 600px) {
+    .hero-section { padding: 40px 16px 32px; }
+    .hero-name { font-size: 32px; }
+    .hero-title { font-size: 16px; }
+    .hero-bio { font-size: 14px; }
+    .hero-avatar { width: 110px; height: 110px; border-radius: 18px; }
+    .btn-primary, .btn-outline { padding: 10px 18px; font-size: 13px; flex: 1; justify-content: center; }
+    .hero-links { width: 100%; }
+
+    .nav-pill { padding: 12px 10px; font-size: 12px; }
+
+    .section, .section-alt { padding: 36px 16px; }
+    .section-title { font-size: 24px; }
+    .section-subtitle { font-size: 14px; margin-bottom: 32px; }
+
+    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; margin-bottom: 40px; }
+    .stat-number { font-size: 26px; }
+    .stat-card { padding: 18px 14px; }
+
+    .project-metrics { grid-template-columns: 1fr 1fr; }
+    .metric-value { font-size: 16px; }
+    .project-header, .project-body { padding: 20px; }
+    .project-name { font-size: 18px; }
+
+    .timeline { padding-left: 20px; }
+    .timeline-item { padding: 0 0 32px 24px; }
+    .timeline-role { font-size: 16px; }
+
+    .contact-card { padding: 16px 18px; }
+    .section-divider { margin: 0 16px; }
+    .footer { padding: 24px 16px; }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -618,6 +682,8 @@ SKILLS = {
     "⚙️  Engenharia de Dados": ["ETL / ELT", "Parquet", "Data Modeling", "Git / GitHub"],
     "☁️  Cloud & Deploy": ["Streamlit Cloud", "GitHub Actions", "Linux"],
     "🧠  Análise & Estatística": ["Análise Exploratória", "K-Means", "Séries Temporais", "KPIs"],
+    "📈  Power BI": ["DAX Avançado", "Modelagem Dimensional", "Power Query", "KPIs de Gestão", "Governança de Dados"],
+    "⚡  Power Automate": ["Automação de Processos", "Fluxos de Aprovação", "Integração Microsoft 365", "Eliminação de Tarefas Manuais"],
 }
 
 PROJECTS = [
@@ -645,28 +711,83 @@ PROJECTS = [
             "Exportação para Excel/PDF e captura de gráficos em PNG",
         ],
     },
+    {
+        "title": "Envelhecimento Populacional e Impactos no SUS",
+        "status": "Finalizado",
+        "desc": (
+            "Projeto acadêmico em grupo (PUC Minas) para construção de uma arquitetura de dados "
+            "em nuvem voltada à análise dos impactos do envelhecimento populacional brasileiro no "
+            "Sistema Único de Saúde (SUS). Integração de projeções demográficas do IBGE com dados "
+            "públicos de saúde para identificar tendências de mortalidade, internações e atendimentos "
+            "ambulatoriais, apoiando previsões de demanda futura por serviços de saúde."
+        ),
+        "metrics": [
+            {"v": "6", "l": "Fases do projeto"},
+            {"v": "2", "l": "Fontes integradas (IBGE + SUS)"},
+            {"v": "6", "l": "Integrantes + orientador"},
+        ],
+        "tech": ["Python", "Jupyter Notebook", "Machine Learning", "Cloud", "SQL", "ETL"],
+        "url": "https://github.com/Tecnologia-em-Banco-de-Dados-PUC-Minas/eixo5_grupo1_20252",
+        "highlights": [
+            "Arquitetura de dados em nuvem para análise de saúde pública",
+            "Documentação de contexto, coleta e pré-processamento de dados estruturados",
+            "Modelos de Machine Learning para identificar tendências de mortalidade e internações",
+            "Análise de resultados e otimização do pipeline em equipe multidisciplinar",
+            "Trabalho colaborativo com 6 integrantes e orientação acadêmica",
+        ],
+    },
 ]
 
 EXPERIENCE = [
     {
-        "date": "2022 – Presente",
-        "role": "Analista de Dados (Projetos Independentes)",
-        "org": "Portfólio Próprio",
+        "date": "Dez 2025 – o momento · 7 meses",
+        "role": "Analista Administrativo Pleno",
+        "org": "TORA · Tempo integral · Contagem, MG",
         "desc": (
-            "Desenvolvimento de dashboards analíticos end-to-end usando Python, Streamlit e Plotly. "
-            "Foco em pipelines ETL com dados públicos abertos, modelagem dimensional e storytelling "
-            "com dados para tomada de decisão baseada em evidências."
+            "Atuo no desenvolvimento de soluções analíticas em Power BI que suportam a tomada de "
+            "decisão operacional e estratégica da empresa.<br><br>"
+            "→ Desenvolvimento de dashboards interativos com KPIs críticos para gestão, utilizando "
+            "DAX avançado e modelagem dimensional.<br>"
+            "→ Implementação de pipelines de automação de dados que eliminam processos manuais "
+            "repetitivos, aumentando a eficiência das equipes.<br>"
+            "→ Integração de múltiplas fontes de dados em ambiente Microsoft com aplicação de boas "
+            "práticas de ETL e governança.<br>"
+            "→ Atuação como ponte entre as áreas de negócio e TI, traduzindo demandas em soluções "
+            "escaláveis e de baixa manutenção.<br><br>"
+            "Stack: Power BI · DAX · Power Automate · Excel · Automação de Processos"
         ),
     },
     {
-        "date": "2022 – Presente",
-        "role": "Estudante de Análise e Desenvolvimento de Sistemas / TI",
-        "org": "Formação Técnica e Superior",
+        "date": "Jan 2025 – Dez 2025 · 1 ano",
+        "role": "Analista Administrativo Jr.",
+        "org": "Grupo SADA · Tempo integral · Betim, MG",
         "desc": (
-            "Formação com ênfase em banco de dados, algoritmos, estrutura de dados e desenvolvimento "
-            "de software. Aplicação prática dos conceitos em projetos reais de análise de dados com "
-            "impacto mensurável."
+            "Primeira experiência profissional com análise de dados aplicada ao ambiente corporativo, "
+            "desenvolvendo habilidades analíticas e de estruturação de informações.<br><br>"
+            "→ Geração de relatórios gerenciais e controles em Excel para acompanhamento de "
+            "indicadores administrativos e operacionais.<br>"
+            "→ Organização e tratamento de bases de dados para alimentar processos de tomada de "
+            "decisão interna.<br>"
+            "→ Automação de tarefas recorrentes, reduzindo o tempo operacional da equipe.<br>"
+            "→ Atuação no suporte analítico às áreas administrativas com foco em eficiência e "
+            "qualidade das informações.<br><br>"
+            "Stack: Excel Avançado · SQL · Análise de Dados · Processos Administrativos"
         ),
+    },
+]
+
+EDUCATION = [
+    {
+        "date": "Mai 2026 – Mai 2027",
+        "role": "Pós-graduação Lato Sensu — MBA, IA, Data Science e Big Data para Negócios",
+        "org": "Ibmec",
+        "desc": "Especialização em Inteligência Artificial, Data Science e Big Data aplicados a negócios, com foco em bancos de dados relacionais.",
+    },
+    {
+        "date": "Ago 2023 – Dez 2025",
+        "role": "Curso Superior de Tecnologia (CST), Banco de Dados",
+        "org": "PUC Minas",
+        "desc": "Formação superior com foco em banco de dados, resolução de problemas e documentação, somando mais de 20 competências desenvolvidas em projetos reais.",
     },
 ]
 
@@ -841,12 +962,13 @@ for proj in PROJECTS:
     )
     tech_html = "".join(f'<span class="tech-tag">{t}</span>' for t in proj["tech"])
     hl_html = "".join(f'<li style="color:#94A3B8;font-size:14px;margin-bottom:6px;line-height:1.6">{h}</li>' for h in proj["highlights"])
+    badge_class = "project-badge finalizado" if proj["status"].lower() == "finalizado" else "project-badge"
 
     st.markdown(f"""
     <div class="section" style="padding-top:0; padding-bottom:48px;">
       <div class="project-card">
         <div class="project-header">
-          <div class="project-badge">{proj['status']}</div>
+          <div class="{badge_class}">{proj['status']}</div>
           <div class="project-name">{proj['title']}</div>
           <div class="project-desc">{proj['desc']}</div>
         </div>
@@ -942,7 +1064,8 @@ st.markdown("""
 <div class="section">
   <div class="section-label">Trajetória</div>
   <h2 class="section-title">Experiência & Formação</h2>
-  <p class="section-subtitle">Construindo expertise através de projetos reais e formação técnica sólida.</p>
+  <p class="section-subtitle">Construindo expertise através de cargos administrativos com foco em dados e formação acadêmica sólida.</p>
+  <h3 style="color:#E2E8F0;font-size:18px;font-weight:600;margin-bottom:20px">Experiência Profissional</h3>
   <div class="timeline">
 """, unsafe_allow_html=True)
 
@@ -953,6 +1076,22 @@ for exp in EXPERIENCE:
       <div class="timeline-role">{exp['role']}</div>
       <div class="timeline-org">{exp['org']}</div>
       <div class="timeline-desc">{exp['desc']}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("""
+  </div>
+  <h3 style="color:#E2E8F0;font-size:18px;font-weight:600;margin:16px 0 20px">Formação Acadêmica</h3>
+  <div class="timeline">
+""", unsafe_allow_html=True)
+
+for edu in EDUCATION:
+    st.markdown(f"""
+    <div class="timeline-item">
+      <div class="timeline-date">{edu['date']}</div>
+      <div class="timeline-role">{edu['role']}</div>
+      <div class="timeline-org">{edu['org']}</div>
+      <div class="timeline-desc">{edu['desc']}</div>
     </div>
     """, unsafe_allow_html=True)
 
