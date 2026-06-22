@@ -34,6 +34,22 @@ html, body, [class*="css"] {
 
 img { max-width: 100%; height: auto; }
 
+/* ── ANIMAÇÃO DE ENTRADA ── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-section, .section-title {
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-section, .section-title {
+        animation: none;
+    }
+}
+
 /* Esconde o menu padrão do Streamlit */
 #MainMenu, footer, header { visibility: hidden; }
 
@@ -205,11 +221,17 @@ img { max-width: 100%; height: auto; }
     z-index: 100;
 }
 
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
 .nav-pills {
     display: flex;
     gap: 0;
-    max-width: 1120px;
-    margin: 0 auto;
 }
 
 .nav-pill {
@@ -226,6 +248,28 @@ img { max-width: 100%; height: auto; }
 .nav-pill:hover, .nav-pill.active {
     color: #818CF8;
     border-bottom-color: #6366F1;
+}
+
+/* Toggle hambúrguer — escondido no desktop, CSS-only (sem JS) */
+.nav-toggle-input { display: none; }
+
+.nav-toggle-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.nav-toggle-btn span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #94A3B8;
+    border-radius: 2px;
+    transition: all 0.2s;
 }
 
 /* ── SECTIONS ── */
@@ -318,11 +362,13 @@ img { max-width: 100%; height: auto; }
     border: 1px solid #2D2D4E;
     border-radius: 16px;
     padding: 28px;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
 }
 
 .skill-category:hover {
     border-color: rgba(99,102,241,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
 .skill-cat-icon {
@@ -356,6 +402,46 @@ img { max-width: 100%; height: auto; }
     font-weight: 500;
     margin: 3px;
     font-family: 'Inter', sans-serif;
+}
+
+/* ── PRINCIPAIS COMPETÊNCIAS ── */
+.highlight-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.highlight-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #1A1A2E;
+    border: 1px solid #2D2D4E;
+    border-radius: 50px;
+    padding: 10px 18px;
+    color: #E2E8F0;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.highlight-chip:hover {
+    border-color: rgba(99,102,241,0.45);
+    background: rgba(99,102,241,0.08);
+    transform: translateY(-2px);
+}
+
+.highlight-chip-icon {
+    width: 18px;
+    height: 18px;
+    color: #818CF8;
+    flex-shrink: 0;
+}
+
+.highlight-chip-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 /* ── LINKEDIN / POWER BI HIGHLIGHTS ── */
@@ -471,6 +557,9 @@ img { max-width: 100%; height: auto; }
     color: #94A3B8;
     line-height: 1.6;
 }
+
+.ver-mais-input { display: none; }
+.ver-mais-label { display: none; }
 
 .project-body {
     padding: 28px;
@@ -685,9 +774,35 @@ img { max-width: 100%; height: auto; }
     .hero-name { font-size: 40px; }
     .hero-avatar { width: 140px; height: 140px; }
 
-    .nav-container { padding: 0 16px; overflow-x: auto; }
-    .nav-pills { gap: 4px; }
-    .nav-pill { padding: 14px 12px; font-size: 13px; white-space: nowrap; }
+    .nav-container { padding: 0 16px; overflow-x: visible; }
+    .nav-bar { position: relative; }
+    .nav-toggle-btn { display: flex; }
+
+    .nav-pills {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: #1A1A2E;
+        border-bottom: 1px solid #2D2D4E;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+    }
+
+    .nav-toggle-input:checked ~ .nav-bar .nav-pills {
+        display: flex;
+    }
+
+    .nav-pill {
+        padding: 14px 20px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border-bottom: 1px solid #2D2D4E;
+        font-size: 14px;
+    }
 
     .section, .section-alt { padding: 48px 24px; }
     .section-title { font-size: 28px; }
@@ -701,6 +816,7 @@ img { max-width: 100%; height: auto; }
 
 /* ── RESPONSIVE: MOBILE ── */
 @media (max-width: 600px) {
+    .hero-section::before { display: none; }
     .hero-section { padding: 40px 16px 32px; }
     .hero-name { font-size: 32px; }
     .hero-title { font-size: 16px; }
@@ -709,7 +825,7 @@ img { max-width: 100%; height: auto; }
     .btn-primary, .btn-outline { padding: 10px 18px; font-size: 13px; flex: 1; justify-content: center; }
     .hero-links { width: 100%; }
 
-    .nav-pill { padding: 12px 10px; font-size: 12px; }
+    .nav-pill { padding: 14px 20px; font-size: 13px; }
 
     .section, .section-alt { padding: 36px 16px; }
     .section-title { font-size: 24px; }
@@ -723,6 +839,29 @@ img { max-width: 100%; height: auto; }
     .metric-value { font-size: 16px; }
     .project-header, .project-body { padding: 20px; }
     .project-name { font-size: 18px; }
+
+    .project-desc.truncate {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .ver-mais-label {
+        display: inline-block;
+        color: #818CF8;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    .ver-mais-input:checked ~ .project-header .project-desc.truncate {
+        -webkit-line-clamp: unset;
+        display: block;
+        overflow: visible;
+    }
+    .ver-mais-input:checked ~ .project-header .ver-mais-label {
+        display: none;
+    }
 
     .linkedin-card { padding: 18px; }
     .linkedin-card-title { font-size: 14px; }
@@ -793,8 +932,8 @@ SKILLS = [
     {"icon": "gear", "title": "Engenharia de Dados", "tags": ["ETL / ELT", "Parquet", "Data Modeling", "Git / GitHub"]},
     {"icon": "cloud", "title": "Cloud & Deploy", "tags": ["Streamlit Cloud", "GitHub Actions", "Linux"]},
     {"icon": "pulse", "title": "Análise & Estatística", "tags": ["Análise Exploratória", "K-Means", "Séries Temporais", "KPIs"]},
-    {"icon": "trending-up", "title": "Business Intelligence", "tags": ["Power BI", "DAX Avançado", "Power Query", "Modelagem Dimensional", "Power Automate", "KPIs de Gestão"]},
-    {"icon": "brain", "title": "Inteligência Artificial", "tags": ["Machine Learning", "IA Generativa", "Prompt Engineering", "Automação Inteligente", "Análise Preditiva"]},
+    {"icon": "trending-up", "title": "Business Intelligence", "tags": ["Data Storytelling", "Geração de Insights", "Modelagem de Dados", "ETL e ELT", "Power BI", "DAX", "Power Query", "SQL", "Dashboards Executivos", "KPIs", "Análise Exploratória de Dados", "Governança de Dados", "Visualização de Dados"]},
+    {"icon": "brain", "title": "Inteligência Artificial", "tags": ["RAG (Retrieval-Augmented Generation)", "Automação com IA", "Fine-Tuning de Modelos", "Engenharia de Prompt", "Agentes de IA", "IA Generativa", "LLMs", "Chatbots Inteligentes", "Processamento de Documentos com IA", "RPA + IA", "IA Aplicada à Análise de Dados"]},
 ]
 
 POWERBI_HIGHLIGHTS = [
@@ -989,7 +1128,7 @@ st.markdown(f"""
       </div>
     </div>
     <div>
-      <img src="{PROFILE['avatar']}" class="hero-avatar" alt="Gian Henrique" />
+      <img src="{PROFILE['avatar']}" class="hero-avatar" alt="Gian Henrique" loading="lazy" />
     </div>
   </div>
 </section>
@@ -1001,12 +1140,18 @@ st.markdown(f"""
 # ─────────────────────────────────────────
 st.markdown("""
 <nav class="nav-container">
-  <div class="nav-pills">
-    <a class="nav-pill active" href="#sobre">Sobre</a>
-    <a class="nav-pill" href="#habilidades">Habilidades</a>
-    <a class="nav-pill" href="#projetos">Projetos</a>
-    <a class="nav-pill" href="#experiencia">Experiência</a>
-    <a class="nav-pill" href="#contato">Contato</a>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
+  <div class="nav-bar">
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </label>
+    <div class="nav-pills">
+      <a class="nav-pill active" href="#sobre">Sobre</a>
+      <a class="nav-pill" href="#habilidades">Habilidades</a>
+      <a class="nav-pill" href="#projetos">Projetos</a>
+      <a class="nav-pill" href="#experiencia">Experiência</a>
+      <a class="nav-pill" href="#contato">Contato</a>
+    </div>
   </div>
 </nav>
 """, unsafe_allow_html=True)
@@ -1037,6 +1182,29 @@ st.markdown("""
   </div>
 </div>
 """, unsafe_allow_html=True)
+
+st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
+
+
+# ─────────────────────────────────────────
+# PRINCIPAIS COMPETÊNCIAS
+# ─────────────────────────────────────────
+TOP_SKILLS = [
+    ("trending-up", "Power BI"),
+    ("code", "Python"),
+    ("database", "SQL"),
+    ("gear", "ETL / ELT"),
+    ("brain", "Machine Learning"),
+    ("zap", "IA Generativa"),
+    ("pulse", "Dashboards Executivos"),
+    ("bot", "Automação de Processos"),
+]
+
+top_skills_html = '<div class="section" style="padding-bottom:0"><div class="section-label">Resumo Rápido</div><h2 class="section-title">Principais Competências</h2><div class="highlight-strip">'
+for icon_key, label in TOP_SKILLS:
+    top_skills_html += f'<span class="highlight-chip"><span class="highlight-chip-icon">{ICONS[icon_key]}</span>{label}</span>'
+top_skills_html += "</div></div>"
+st.markdown(top_skills_html, unsafe_allow_html=True)
 
 st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
@@ -1160,7 +1328,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-for proj in PROJECTS:
+for proj_idx, proj in enumerate(PROJECTS):
     metrics_html = "".join(
         f'<div class="metric-box"><div class="metric-value">{m["v"]}</div><div class="metric-label">{m["l"]}</div></div>'
         for m in proj["metrics"]
@@ -1168,14 +1336,17 @@ for proj in PROJECTS:
     tech_html = "".join(f'<span class="tech-tag">{t}</span>' for t in proj["tech"])
     hl_html = "".join(f'<li style="color:#94A3B8;font-size:14px;margin-bottom:6px;line-height:1.6">{h}</li>' for h in proj["highlights"])
     badge_class = "project-badge finalizado" if proj["status"].lower() == "finalizado" else "project-badge"
+    toggle_id = f"ver-mais-{proj_idx}"
 
     st.markdown(f"""
     <div class="section" style="padding-top:0; padding-bottom:48px;">
       <div class="project-card">
+        <input type="checkbox" id="{toggle_id}" class="ver-mais-input">
         <div class="project-header">
           <div class="{badge_class}">{proj['status']}</div>
           <div class="project-name">{proj['title']}</div>
-          <div class="project-desc">{proj['desc']}</div>
+          <div class="project-desc truncate">{proj['desc']}</div>
+          <label for="{toggle_id}" class="ver-mais-label">Ver mais ▾</label>
         </div>
         <div class="project-body">
           <div class="project-metrics">{metrics_html}</div>
@@ -1296,7 +1467,7 @@ with col_sus1:
     st.plotly_chart(fig4, use_container_width=True, config={"displayModeBar": False})
 
 with col_sus2:
-    bases = ["Mortalidade<br>(faixa etária + CID-10)", "Ambulatorial<br>(município)", "Internações<br>(município)"]
+    bases = ["Mortalidade (Faixa Etária + CID-10)", "Ambulatorial (Município)", "Internações (Município)"]
     relevancia = [82, 76, 54]
 
     fig5 = go.Figure(go.Bar(
@@ -1311,7 +1482,7 @@ with col_sus2:
         title=dict(text="Principal Determinante por Base de Dados", font=dict(color="#E2E8F0", size=14)),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(26,26,46,0.6)",
         xaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B"), showticklabels=False),
-        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#94A3B8"), automargin=True),
+        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#94A3B8", size=11), automargin=True),
         margin=dict(l=10, r=50, t=48, b=10),
         height=320,
     )
