@@ -28,12 +28,19 @@ html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+img { max-width: 100%; height: auto; }
+
 /* Esconde o menu padrão do Streamlit */
 #MainMenu, footer, header { visibility: hidden; }
 
 /* Fundo principal */
 .stApp {
     background: #0F0F1A;
+    overflow-x: hidden;
 }
 
 /* Remove padding padrão do Streamlit */
@@ -41,6 +48,7 @@ html, body, [class*="css"] {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
     max-width: 1200px;
+    overflow-x: hidden;
 }
 
 /* ── HERO ── */
@@ -340,7 +348,7 @@ html, body, [class*="css"] {
     font-size: 12px;
     font-weight: 500;
     margin: 3px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', sans-serif;
 }
 
 /* ── LINKEDIN / POWER BI HIGHLIGHTS ── */
@@ -502,7 +510,8 @@ html, body, [class*="css"] {
     border-radius: 6px;
     padding: 4px 10px;
     font-size: 12px;
-    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
 }
 
 .project-link {
