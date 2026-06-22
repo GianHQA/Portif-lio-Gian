@@ -340,6 +340,66 @@ html, body, [class*="css"] {
     font-family: 'JetBrains Mono', monospace;
 }
 
+/* ── LINKEDIN / POWER BI HIGHLIGHTS ── */
+.linkedin-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.linkedin-card {
+    background: #1A1A2E;
+    border: 1px solid #2D2D4E;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.linkedin-card:hover {
+    border-color: rgba(99,102,241,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.linkedin-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #E2E8F0;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.linkedin-card-desc {
+    font-size: 13px;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    flex-grow: 1;
+}
+
+.linkedin-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.linkedin-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #818CF8 !important;
+    text-decoration: none !important;
+    font-size: 13px;
+    font-weight: 500;
+    transition: gap 0.2s;
+}
+
+.linkedin-card-link:hover { gap: 10px; }
+
 /* ── PROJECT CARDS ── */
 .project-card {
     background: #1A1A2E;
@@ -615,6 +675,7 @@ html, body, [class*="css"] {
 
     .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .skills-grid { grid-template-columns: 1fr !important; }
+    .linkedin-grid { grid-template-columns: 1fr !important; }
     .project-metrics { grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .contact-grid { grid-template-columns: 1fr !important; }
 }
@@ -685,6 +746,49 @@ SKILLS = {
     "📈  Power BI": ["DAX Avançado", "Modelagem Dimensional", "Power Query", "KPIs de Gestão", "Governança de Dados"],
     "⚡  Power Automate": ["Automação de Processos", "Fluxos de Aprovação", "Integração Microsoft 365", "Eliminação de Tarefas Manuais"],
 }
+
+POWERBI_HIGHLIGHTS = [
+    {
+        "title": "Arquitetura de Dados em Nuvem para Saúde Pública (SUS)",
+        "desc": (
+            "Projeto acadêmico em equipe utilizando Microsoft Fabric para todo o processo de ETL "
+            "e análise de dados, com dashboards em Power BI para apoiar políticas públicas a partir "
+            "de tendências de mortalidade, internações e atendimentos ambulatoriais."
+        ),
+        "tags": ["Power BI", "Microsoft Fabric", "ETL", "PUC Minas"],
+        "url": "https://www.linkedin.com/posts/gian-henrique_pucminas-powerbi-etl-ugcPost-7382929412842835968-U43x/",
+    },
+    {
+        "title": "Cálculo de Raio Geográfico com Python para Mapas no Power BI",
+        "desc": (
+            "Solução em Python (Geopy + Pandas) para identificar cidades dentro de um raio "
+            "geográfico, contornando limitações nativas do Power BI e exportando os dados tratados "
+            "para visualização em mapa dentro do BI."
+        ),
+        "tags": ["Python", "Geopy", "Pandas", "Power BI"],
+        "url": "https://www.linkedin.com/posts/gian-henrique_ol%C3%A1-provavelmente-voc%C3%AA-deve-estar-se-perguntando-ugcPost-7239805669359386625-gBvh/",
+    },
+    {
+        "title": "Redesign de Dashboard com Figma e Tooltips Analíticos",
+        "desc": (
+            "Reformulação de layout de dashboard em equipe, refazendo o design no Figma e "
+            "acrescentando dicas de ferramenta (tooltips) para aprofundar a análise dos dados "
+            "diretamente no Power BI."
+        ),
+        "tags": ["Power BI", "Figma", "UX para Dados"],
+        "url": "https://www.linkedin.com/posts/gian-henrique_bom-gente-est%C3%A1-ai-o-resultado-final-neste-ugcPost-7137973119444594688-DHkf/",
+    },
+    {
+        "title": "Automação de Planilhas Excel com Inteligência Artificial",
+        "desc": (
+            "Uso de IA generativa para acelerar rotinas em Excel — criação assistida de fórmulas, "
+            "scripts e macros (VBA/Office Scripts), reduzindo o tempo manual em relatórios "
+            "recorrentes e aumentando a confiabilidade das planilhas."
+        ),
+        "tags": ["Excel", "VBA", "IA Generativa", "Automação"],
+        "url": None,
+    },
+]
 
 PROJECTS = [
     {
@@ -939,6 +1043,33 @@ with col_tags:
         """
     skills_html += "</div>"
     st.markdown(skills_html, unsafe_allow_html=True)
+
+# Power BI na prática — experiências compartilhadas no LinkedIn
+st.markdown("""
+<div class="section-alt" style="padding-top:0">
+  <div class="section-inner">
+    <h3 style="color:#E2E8F0;font-size:18px;font-weight:600;margin:8px 0 4px">Power BI na Prática</h3>
+    <p style="color:#64748B;font-size:14px;margin-bottom:0">Experiências reais compartilhadas no LinkedIn.</p>
+""", unsafe_allow_html=True)
+
+cards_html = '<div class="linkedin-grid">'
+for item in POWERBI_HIGHLIGHTS:
+    tags_html = "".join(f'<span class="skill-tag">{t}</span>' for t in item["tags"])
+    link_html = (
+        f'<a href="{item["url"]}" target="_blank" class="linkedin-card-link">🔗 Ver no LinkedIn →</a>'
+        if item["url"] else
+        '<span class="linkedin-card-link" style="color:#64748B !important">💡 Aplicação prática contínua</span>'
+    )
+    cards_html += f"""
+    <div class="linkedin-card">
+      <div class="linkedin-card-title">{item['title']}</div>
+      <div class="linkedin-card-desc">{item['desc']}</div>
+      <div class="linkedin-card-tags">{tags_html}</div>
+      {link_html}
+    </div>
+    """
+cards_html += "</div></div></div>"
+st.markdown(cards_html, unsafe_allow_html=True)
 
 st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
