@@ -17,13 +17,57 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────
+# PALETA DE CORES (preto + vermelho pastel + neutros quentes)
+# Fonte única de verdade para CSS e para os gráficos Plotly.
+# ─────────────────────────────────────────
+COLORS = {
+    "bg": "#0A0908",
+    "bg_alt": "#100E0D",
+    "surface": "#141210",
+    "surface_2": "#1A1714",
+    "border": "#2A2624",
+    "border_strong": "#3A3432",
+    "accent": "#E8867D",
+    "accent_light": "#F2A7A0",
+    "accent_lighter": "#F4B8B0",
+    "accent_dark": "#C96860",
+    "accent_soft": "rgba(232,134,125,0.14)",
+    "accent_soft_strong": "rgba(232,134,125,0.30)",
+    "text_1": "#FAF8F6",
+    "text_2": "#A8A29E",
+    "text_3": "#7A7370",
+    "neutral_bar": "#4A4440",
+}
+
+# ─────────────────────────────────────────
 # CSS GLOBAL
 # ─────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* Reset e base */
+:root {
+    --bg: #0A0908;
+    --bg-alt: #100E0D;
+    --surface: #141210;
+    --surface-2: #1A1714;
+    --border: #2A2624;
+    --border-strong: #3A3432;
+    --accent: #E8867D;
+    --accent-light: #F2A7A0;
+    --accent-lighter: #F4B8B0;
+    --accent-dark: #C96860;
+    --accent-soft: rgba(232,134,125,0.14);
+    --accent-soft-strong: rgba(232,134,125,0.30);
+    --text-1: #FAF8F6;
+    --text-2: #A8A29E;
+    --text-3: #7A7370;
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --ease: cubic-bezier(.2,.7,.2,1);
+}
+
 html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
 }
@@ -32,16 +76,26 @@ html, body, [class*="css"] {
     box-sizing: border-box;
 }
 
+html { scroll-behavior: smooth; }
+
 img { max-width: 100%; height: auto; }
+
+::selection { background: var(--accent-soft-strong); color: var(--text-1); }
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
 
 /* ── ANIMAÇÃO DE ENTRADA ── */
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(16px); }
+    from { opacity: 0; transform: translateY(18px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .hero-section, .section-title {
-    animation: fadeInUp 0.6s ease-out both;
+    animation: fadeInUp 0.7s var(--ease) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -55,7 +109,7 @@ img { max-width: 100%; height: auto; }
 
 /* Fundo principal */
 .stApp {
-    background: #0F0F1A;
+    background: var(--bg);
     overflow-x: hidden;
 }
 
@@ -69,9 +123,11 @@ img { max-width: 100%; height: auto; }
 
 /* ── HERO ── */
 .hero-section {
-    background: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 50%, #16213E 100%);
-    padding: 80px 40px 60px;
-    border-bottom: 1px solid #2D2D4E;
+    background:
+        radial-gradient(circle at 85% 0%, rgba(232,134,125,0.10) 0%, transparent 55%),
+        linear-gradient(160deg, #0A0908 0%, #120F0D 55%, #18130F 100%);
+    padding: 96px 40px 64px;
+    border-bottom: 1px solid var(--border);
     position: relative;
     overflow: hidden;
 }
@@ -79,77 +135,79 @@ img { max-width: 100%; height: auto; }
 .hero-section::before {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
-    border-radius: 50%;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 70%);
     pointer-events: none;
 }
 
 .hero-grid {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 40px;
+    gap: 48px;
     align-items: center;
     max-width: 1120px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(99,102,241,0.15);
-    border: 1px solid rgba(99,102,241,0.35);
+    gap: 9px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-strong);
     border-radius: 50px;
-    padding: 6px 16px;
+    padding: 7px 16px;
     font-size: 13px;
-    color: #818CF8;
+    color: var(--accent-light);
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .hero-badge-dot {
     width: 7px;
     height: 7px;
-    background: #22C55E;
+    background: var(--accent);
     border-radius: 50%;
-    animation: pulse-green 2s infinite;
+    animation: pulse-accent 2s infinite;
 }
 
-@keyframes pulse-green {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.3); }
+@keyframes pulse-accent {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(232,134,125,0.5); }
+    50% { opacity: 0.7; transform: scale(1.25); box-shadow: 0 0 0 4px rgba(232,134,125,0); }
 }
 
 .hero-name {
-    font-size: 52px;
-    font-weight: 700;
-    color: #F1F5F9;
-    line-height: 1.1;
-    margin: 0 0 12px;
-    letter-spacing: -1.5px;
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--text-1);
+    line-height: 1.08;
+    margin: 0 0 14px;
+    letter-spacing: -1.8px;
 }
 
 .hero-name span {
-    background: linear-gradient(135deg, #6366F1, #A78BFA);
+    background: linear-gradient(135deg, var(--accent), var(--accent-lighter));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-title {
     font-size: 20px;
-    color: #94A3B8;
+    color: var(--text-2);
     font-weight: 400;
     margin: 0 0 24px;
 }
 
 .hero-bio {
     font-size: 16px;
-    color: #CBD5E1;
-    line-height: 1.75;
+    color: #C9C2BD;
+    line-height: 1.8;
     max-width: 620px;
     margin-bottom: 36px;
 }
@@ -160,61 +218,92 @@ img { max-width: 100%; height: auto; }
     flex-wrap: wrap;
 }
 
+.btn-ico {
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.btn-ico svg { width: 100%; height: 100%; }
+
 .btn-primary {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    background: #6366F1;
-    color: white !important;
-    padding: 12px 24px;
-    border-radius: 10px;
+    gap: 9px;
+    background: var(--accent);
+    color: #1A0E0C !important;
+    padding: 13px 24px;
+    border-radius: var(--radius-sm);
     text-decoration: none !important;
     font-weight: 600;
     font-size: 14px;
-    transition: all 0.2s;
+    transition: all 0.2s var(--ease);
     border: none;
 }
 
 .btn-primary:hover {
-    background: #4F46E5;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(99,102,241,0.35);
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(232,134,125,0.30);
 }
 
 .btn-outline {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
     background: transparent;
-    color: #94A3B8 !important;
-    padding: 12px 24px;
-    border-radius: 10px;
+    color: var(--text-2) !important;
+    padding: 13px 24px;
+    border-radius: var(--radius-sm);
     text-decoration: none !important;
     font-weight: 500;
     font-size: 14px;
-    border: 1px solid #334155;
-    transition: all 0.2s;
+    border: 1px solid var(--border-strong);
+    transition: all 0.2s var(--ease);
 }
 
 .btn-outline:hover {
-    border-color: #6366F1;
-    color: #818CF8 !important;
-    background: rgba(99,102,241,0.08);
+    border-color: var(--accent);
+    color: var(--accent-light) !important;
+    background: var(--accent-soft);
+    transform: translateY(-2px);
+}
+
+.hero-avatar-wrap {
+    position: relative;
+    width: 188px;
+    height: 188px;
+}
+
+.hero-avatar-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--accent), transparent 70%);
+    opacity: 0.35;
+    filter: blur(18px);
+    z-index: 0;
 }
 
 .hero-avatar {
-    width: 180px;
-    height: 180px;
+    width: 188px;
+    height: 188px;
     border-radius: 24px;
-    border: 3px solid rgba(99,102,241,0.4);
-    box-shadow: 0 0 40px rgba(99,102,241,0.2);
+    border: 2px solid var(--border-strong);
     object-fit: cover;
+    position: relative;
+    z-index: 1;
+    display: block;
 }
 
 /* ── NAV PILLS ── */
 .nav-container {
-    background: #1A1A2E;
-    border-bottom: 1px solid #2D2D4E;
+    background: rgba(10,9,8,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
     padding: 0 40px;
     position: sticky;
     top: 0;
@@ -231,23 +320,23 @@ img { max-width: 100%; height: auto; }
 
 .nav-pills {
     display: flex;
-    gap: 0;
+    gap: 4px;
 }
 
 .nav-pill {
-    padding: 16px 20px;
-    color: #64748B;
-    text-decoration: none;
+    padding: 18px 18px;
+    color: var(--text-3) !important;
+    text-decoration: none !important;
     font-size: 14px;
     font-weight: 500;
     border-bottom: 2px solid transparent;
-    transition: all 0.2s;
+    transition: all 0.2s var(--ease);
     cursor: pointer;
 }
 
 .nav-pill:hover, .nav-pill.active {
-    color: #818CF8;
-    border-bottom-color: #6366F1;
+    color: var(--accent-light) !important;
+    border-bottom-color: var(--accent);
 }
 
 /* Toggle hambúrguer — escondido no desktop, CSS-only (sem JS) */
@@ -258,8 +347,8 @@ img { max-width: 100%; height: auto; }
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     cursor: pointer;
 }
 
@@ -267,21 +356,31 @@ img { max-width: 100%; height: auto; }
     display: block;
     height: 2px;
     width: 100%;
-    background: #94A3B8;
+    background: var(--text-2);
     border-radius: 2px;
-    transition: all 0.2s;
+    transition: all 0.25s var(--ease);
+}
+
+.nav-toggle-input:checked ~ .nav-bar .nav-toggle-btn span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle-input:checked ~ .nav-bar .nav-toggle-btn span:nth-child(2) {
+    opacity: 0;
+}
+.nav-toggle-input:checked ~ .nav-bar .nav-toggle-btn span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ── SECTIONS ── */
 .section {
-    padding: 72px 40px;
+    padding: 80px 40px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .section-alt {
-    background: #131320;
-    padding: 72px 40px;
+    background: var(--bg-alt);
+    padding: 80px 40px;
 }
 
 .section-inner {
@@ -292,24 +391,24 @@ img { max-width: 100%; height: auto; }
 .section-label {
     font-size: 13px;
     font-weight: 600;
-    color: #6366F1;
+    color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .section-title {
-    font-size: 36px;
-    font-weight: 700;
-    color: #F1F5F9;
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--text-1);
     margin: 0 0 12px;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.7px;
 }
 
 .section-subtitle {
     font-size: 16px;
-    color: #64748B;
-    margin-bottom: 48px;
+    color: var(--text-3);
+    margin-bottom: 52px;
 }
 
 /* ── STATS ── */
@@ -317,36 +416,45 @@ img { max-width: 100%; height: auto; }
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    margin-bottom: 64px;
+    margin-bottom: 68px;
 }
 
 .stat-card {
-    background: #1A1A2E;
-    border: 1px solid #2D2D4E;
-    border-radius: 16px;
-    padding: 28px 24px;
-    text-align: center;
-    transition: all 0.2s;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 26px 22px;
+    transition: all 0.25s var(--ease);
 }
 
 .stat-card:hover {
-    border-color: rgba(99,102,241,0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    border-color: var(--accent-soft-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.45);
 }
 
+.stat-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--accent);
+    margin-bottom: 14px;
+}
+
+.stat-icon svg { width: 100%; height: 100%; }
+
 .stat-number {
-    font-size: 36px;
-    font-weight: 700;
-    color: #818CF8;
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--text-1);
     display: block;
     letter-spacing: -1px;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .stat-label {
     font-size: 13px;
-    color: #64748B;
-    margin-top: 4px;
+    color: var(--text-3);
+    margin-top: 6px;
 }
 
 /* ── SKILL CARDS ── */
@@ -358,25 +466,25 @@ img { max-width: 100%; height: auto; }
 }
 
 .skill-category {
-    background: #1A1A2E;
-    border: 1px solid #2D2D4E;
-    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
     padding: 28px;
-    transition: all 0.2s;
+    transition: all 0.25s var(--ease);
 }
 
 .skill-category:hover {
-    border-color: rgba(99,102,241,0.35);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    border-color: var(--accent-soft-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.45);
 }
 
 .skill-cat-icon {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     margin-bottom: 14px;
     display: block;
-    color: #818CF8;
+    color: var(--accent);
 }
 
 .skill-cat-icon svg {
@@ -387,15 +495,15 @@ img { max-width: 100%; height: auto; }
 .skill-cat-title {
     font-size: 16px;
     font-weight: 600;
-    color: #E2E8F0;
+    color: var(--text-1);
     margin-bottom: 16px;
 }
 
 .skill-tag {
     display: inline-block;
-    background: rgba(99,102,241,0.12);
-    border: 1px solid rgba(99,102,241,0.25);
-    color: #A5B4FC;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-strong);
+    color: var(--accent-light);
     border-radius: 6px;
     padding: 4px 10px;
     font-size: 12px;
@@ -416,26 +524,26 @@ img { max-width: 100%; height: auto; }
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: #1A1A2E;
-    border: 1px solid #2D2D4E;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 50px;
     padding: 10px 18px;
-    color: #E2E8F0;
+    color: var(--text-1);
     font-size: 14px;
     font-weight: 500;
-    transition: all 0.2s;
+    transition: all 0.2s var(--ease);
 }
 
 .highlight-chip:hover {
-    border-color: rgba(99,102,241,0.45);
-    background: rgba(99,102,241,0.08);
+    border-color: var(--accent-soft-strong);
+    background: var(--accent-soft);
     transform: translateY(-2px);
 }
 
 .highlight-chip-icon {
     width: 18px;
     height: 18px;
-    color: #818CF8;
+    color: var(--accent);
     flex-shrink: 0;
 }
 
@@ -453,11 +561,11 @@ img { max-width: 100%; height: auto; }
 }
 
 .linkedin-card {
-    background: #1A1A2E;
-    border: 1px solid #2D2D4E;
-    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
     padding: 24px;
-    transition: all 0.2s;
+    transition: all 0.25s var(--ease);
     display: flex;
     flex-direction: column;
     max-width: 100%;
@@ -466,22 +574,22 @@ img { max-width: 100%; height: auto; }
 }
 
 .linkedin-card:hover {
-    border-color: rgba(99,102,241,0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    border-color: var(--accent-soft-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.45);
 }
 
 .linkedin-card-title {
     font-size: 15px;
     font-weight: 600;
-    color: #E2E8F0;
+    color: var(--text-1);
     margin-bottom: 8px;
     line-height: 1.4;
 }
 
 .linkedin-card-desc {
     font-size: 13px;
-    color: #94A3B8;
+    color: var(--text-2);
     line-height: 1.6;
     margin-bottom: 14px;
     flex-grow: 1;
@@ -499,27 +607,27 @@ img { max-width: 100%; height: auto; }
     align-items: center;
     gap: 8px;
     align-self: flex-start;
-    background: rgba(99,102,241,0.12);
-    border: 1px solid rgba(99,102,241,0.3);
-    color: #A5B4FC !important;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-strong);
+    color: var(--accent-light) !important;
     text-decoration: none !important;
     font-size: 13px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 50px;
-    transition: all 0.2s;
+    transition: all 0.2s var(--ease);
 }
 
 .linkedin-card-link:hover {
-    background: rgba(99,102,241,0.22);
-    border-color: rgba(99,102,241,0.5);
-    transform: translateY(-1px);
+    background: var(--accent-soft-strong);
+    border-color: var(--accent);
+    transform: translateY(-2px);
 }
 
 .linkedin-card-link-disabled {
     background: transparent;
-    border-color: #2D2D4E;
-    color: #64748B !important;
+    border-color: var(--border);
+    color: var(--text-3) !important;
     cursor: default;
 }
 
@@ -541,30 +649,30 @@ img { max-width: 100%; height: auto; }
 
 /* ── PROJECT CARDS ── */
 .project-card {
-    background: #1A1A2E;
-    border: 1px solid #2D2D4E;
-    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all 0.25s;
+    transition: all 0.3s var(--ease);
 }
 
 .project-card:hover {
-    border-color: rgba(99,102,241,0.45);
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    border-color: var(--accent-soft-strong);
+    transform: translateY(-5px);
+    box-shadow: 0 22px 56px rgba(0,0,0,0.5);
 }
 
 .project-header {
-    background: linear-gradient(135deg, #1E1E3F, #252545);
-    padding: 28px;
-    border-bottom: 1px solid #2D2D4E;
+    background: linear-gradient(135deg, #161210, #1C1714);
+    padding: 30px;
+    border-bottom: 1px solid var(--border);
 }
 
 .project-badge {
     display: inline-block;
-    background: rgba(34,197,94,0.15);
-    border: 1px solid rgba(34,197,94,0.3);
-    color: #4ADE80;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: #C9C2BD;
     border-radius: 50px;
     padding: 3px 12px;
     font-size: 11px;
@@ -575,41 +683,43 @@ img { max-width: 100%; height: auto; }
 }
 
 .project-badge.finalizado {
-    background: rgba(99,102,241,0.15);
-    border: 1px solid rgba(99,102,241,0.35);
-    color: #A5B4FC;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-strong);
+    color: var(--accent-light);
 }
 
 .project-name {
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 700;
-    color: #F1F5F9;
+    color: var(--text-1);
     margin-bottom: 8px;
+    letter-spacing: -0.3px;
 }
 
 .project-desc {
     font-size: 14px;
-    color: #94A3B8;
-    line-height: 1.6;
+    color: var(--text-2);
+    line-height: 1.65;
 }
 
 .ver-mais-input { display: none; }
 .ver-mais-label { display: none; }
 
 .project-body {
-    padding: 28px;
+    padding: 30px;
 }
 
 .project-metrics {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .metric-box {
-    background: #111124;
-    border-radius: 10px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 12px;
     padding: 14px;
     text-align: center;
 }
@@ -617,13 +727,13 @@ img { max-width: 100%; height: auto; }
 .metric-value {
     font-size: 20px;
     font-weight: 700;
-    color: #818CF8;
+    color: var(--accent-light);
     font-family: 'JetBrains Mono', monospace;
 }
 
 .metric-label {
     font-size: 11px;
-    color: #475569;
+    color: var(--text-3);
     margin-top: 2px;
 }
 
@@ -631,13 +741,13 @@ img { max-width: 100%; height: auto; }
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-top: 20px;
+    margin-top: 22px;
 }
 
 .tech-tag {
-    background: #111124;
-    border: 1px solid #2D2D4E;
-    color: #94A3B8;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    color: var(--text-2);
     border-radius: 6px;
     padding: 4px 10px;
     font-size: 12px;
@@ -649,12 +759,12 @@ img { max-width: 100%; height: auto; }
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #818CF8 !important;
+    color: var(--accent-light) !important;
     text-decoration: none !important;
     font-size: 13px;
-    font-weight: 500;
-    margin-top: 20px;
-    transition: gap 0.2s;
+    font-weight: 600;
+    margin-top: 22px;
+    transition: gap 0.2s var(--ease);
 }
 
 .project-link:hover { gap: 10px; }
@@ -672,7 +782,7 @@ img { max-width: 100%; height: auto; }
     top: 8px;
     bottom: 8px;
     width: 2px;
-    background: linear-gradient(to bottom, #6366F1, transparent);
+    background: linear-gradient(to bottom, var(--accent), transparent);
 }
 
 .timeline-item {
@@ -688,14 +798,14 @@ img { max-width: 100%; height: auto; }
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #6366F1;
-    border: 3px solid #0F0F1A;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 3px var(--accent-soft-strong);
 }
 
 .timeline-date {
     font-size: 12px;
-    color: #6366F1;
+    color: var(--accent-light);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -705,20 +815,20 @@ img { max-width: 100%; height: auto; }
 .timeline-role {
     font-size: 18px;
     font-weight: 600;
-    color: #E2E8F0;
+    color: var(--text-1);
     margin-bottom: 4px;
 }
 
 .timeline-org {
     font-size: 14px;
-    color: #64748B;
+    color: var(--text-3);
     margin-bottom: 12px;
 }
 
 .timeline-desc {
     font-size: 14px;
-    color: #94A3B8;
-    line-height: 1.7;
+    color: var(--text-2);
+    line-height: 1.75;
 }
 
 /* ── CONTACT ── */
@@ -733,35 +843,37 @@ img { max-width: 100%; height: auto; }
     display: flex;
     align-items: center;
     gap: 16px;
-    background: #1A1A2E;
-    border: 1px solid #2D2D4E;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 14px;
     padding: 20px 24px;
     text-decoration: none !important;
-    transition: all 0.2s;
+    transition: all 0.2s var(--ease);
 }
 
 .contact-card:hover {
-    border-color: rgba(99,102,241,0.4);
-    background: rgba(99,102,241,0.06);
-    transform: translateX(4px);
+    border-color: var(--accent-soft-strong);
+    background: var(--accent-soft);
+    transform: translateX(5px);
 }
 
 .contact-icon {
-    font-size: 24px;
     width: 48px;
     height: 48px;
-    background: rgba(99,102,241,0.12);
+    background: var(--accent-soft);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: var(--accent);
 }
+
+.contact-icon svg { width: 22px; height: 22px; }
 
 .contact-label {
     font-size: 12px;
-    color: #64748B;
+    color: var(--text-3);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -769,64 +881,68 @@ img { max-width: 100%; height: auto; }
 
 .contact-value {
     font-size: 15px;
-    color: #E2E8F0;
+    color: var(--text-1);
     font-weight: 500;
     margin-top: 2px;
 }
 
 /* ── FOOTER ── */
 .footer {
-    background: #0A0A14;
-    border-top: 1px solid #1E1E32;
+    background: #060504;
+    border-top: 1px solid #211D1B;
     padding: 32px 40px;
     text-align: center;
 }
 
 .footer-text {
-    color: #334155;
+    color: var(--text-3);
     font-size: 14px;
 }
 
 .footer-text span {
-    color: #6366F1;
+    color: var(--accent);
 }
 
 /* ── DIVIDER ── */
 .section-divider {
     height: 1px;
-    background: linear-gradient(to right, transparent, #2D2D4E, transparent);
+    background: linear-gradient(to right, transparent, var(--border), transparent);
     margin: 0 40px;
 }
 
 /* ── RESPONSIVE: TABLET ── */
 @media (max-width: 900px) {
-    .hero-section { padding: 56px 24px 40px; }
-    .hero-grid { grid-template-columns: 1fr; gap: 28px; text-align: center; }
+    .hero-section { padding: 60px 24px 44px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
     .hero-grid > div:first-child { order: 2; }
     .hero-grid > div:last-child { order: 1; display: flex; justify-content: center; }
     .hero-links { justify-content: center; }
     .hero-bio { margin: 0 auto 36px; }
-    .hero-name { font-size: 40px; }
-    .hero-avatar { width: 140px; height: 140px; }
+    .hero-name { font-size: 42px; }
+    .hero-avatar, .hero-avatar-wrap { width: 148px; height: 148px; }
 
     .nav-container { padding: 0 16px; overflow-x: visible; }
     .nav-bar { position: relative; }
     .nav-toggle-btn { display: flex; }
 
     .nav-pills {
-        display: none;
+        max-height: 0;
+        overflow: hidden;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
         flex-direction: column;
-        background: #1A1A2E;
-        border-bottom: 1px solid #2D2D4E;
-        box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+        gap: 0;
+        background: rgba(10,9,8,0.97);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 16px 32px rgba(0,0,0,0.5);
+        transition: max-height 0.3s var(--ease);
     }
 
     .nav-toggle-input:checked ~ .nav-bar .nav-pills {
-        display: flex;
+        max-height: 70vh;
     }
 
     .nav-pill {
@@ -835,12 +951,19 @@ img { max-width: 100%; height: auto; }
         display: flex;
         align-items: center;
         width: 100%;
-        border-bottom: 1px solid #2D2D4E;
+        border-bottom: 1px solid var(--border);
+        border-left: 2px solid transparent;
         font-size: 14px;
     }
 
-    .section, .section-alt { padding: 48px 24px; }
-    .section-title { font-size: 28px; }
+    .nav-pill:hover, .nav-pill.active {
+        border-bottom-color: var(--border);
+        border-left-color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .section, .section-alt { padding: 52px 24px; }
+    .section-title { font-size: 30px; }
 
     .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .skills-grid { grid-template-columns: 1fr !important; }
@@ -851,29 +974,29 @@ img { max-width: 100%; height: auto; }
 
 /* ── RESPONSIVE: MOBILE ── */
 @media (max-width: 600px) {
-    .hero-section::before { display: none; }
-    .hero-section { padding: 40px 16px 32px; }
-    .hero-name { font-size: 32px; }
+    .hero-section::before { opacity: 0.5; }
+    .hero-section { padding: 44px 16px 36px; }
+    .hero-name { font-size: 33px; }
     .hero-title { font-size: 16px; }
     .hero-bio { font-size: 14px; }
-    .hero-avatar { width: 110px; height: 110px; border-radius: 18px; }
-    .btn-primary, .btn-outline { padding: 10px 18px; font-size: 13px; flex: 1; justify-content: center; }
+    .hero-avatar, .hero-avatar-wrap { width: 116px; height: 116px; border-radius: 18px; }
+    .btn-primary, .btn-outline { padding: 11px 18px; font-size: 13px; flex: 1; justify-content: center; }
     .hero-links { width: 100%; }
 
     .nav-pill { padding: 14px 20px; font-size: 13px; }
 
-    .section, .section-alt { padding: 36px 16px; }
-    .section-title { font-size: 24px; }
-    .section-subtitle { font-size: 14px; margin-bottom: 32px; }
+    .section, .section-alt { padding: 40px 16px; }
+    .section-title { font-size: 25px; }
+    .section-subtitle { font-size: 14px; margin-bottom: 34px; }
 
-    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; margin-bottom: 40px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; margin-bottom: 42px; }
     .stat-number { font-size: 26px; }
     .stat-card { padding: 18px 14px; }
 
     .project-metrics { grid-template-columns: 1fr 1fr; }
     .metric-value { font-size: 16px; }
-    .project-header, .project-body { padding: 20px; }
-    .project-name { font-size: 18px; }
+    .project-header, .project-body { padding: 22px; }
+    .project-name { font-size: 19px; }
 
     .project-desc.truncate {
         display: -webkit-box;
@@ -883,7 +1006,7 @@ img { max-width: 100%; height: auto; }
     }
     .ver-mais-label {
         display: inline-block;
-        color: #818CF8;
+        color: var(--accent-light);
         font-size: 13px;
         font-weight: 600;
         margin-top: 10px;
@@ -960,6 +1083,9 @@ ICONS = {
     "bot": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><circle cx="9" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1" fill="currentColor" stroke="none"/><path d="M12 9V5"/><circle cx="12" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><path d="M3 13h2"/><path d="M19 13h2"/></svg>',
     "zap": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
     "linkedin": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M4.5 3.5A2.5 2.5 0 1 0 4.5 8.5 2.5 2.5 0 0 0 4.5 3.5Z"/><rect x="2.5" y="9.5" width="4" height="12"/><path d="M10.5 9.5h4v2c.9-1.5 2.4-2.4 4.2-2.4 3.5 0 4.8 2.4 4.8 6V21.5h-4v-5.4c0-1.5-.5-2.6-1.9-2.6-1.1 0-1.8.8-2.1 1.5-.1.3-.1.6-.1 1v5.5h-4Z"/></svg>',
+    "github": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-1.05-.01-1.9-2.78.62-3.37-1.22-3.37-1.22-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.04 1.53 1.04.89 1.55 2.34 1.1 2.91.84.09-.65.35-1.1.63-1.35-2.22-.26-4.56-1.13-4.56-5.02 0-1.11.39-2.02 1.03-2.73-.1-.26-.45-1.3.1-2.7 0 0 .84-.27 2.75 1.04a9.4 9.4 0 0 1 5 0c1.91-1.31 2.75-1.04 2.75-1.04.55 1.4.2 2.44.1 2.7.64.71 1.03 1.62 1.03 2.73 0 3.9-2.35 4.76-4.58 5.01.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>',
+    "mail": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 8.3 6a1.5 1.5 0 0 0 1.7 0L21 7"/></svg>',
+    "whatsapp": '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.78 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.39c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 5.83 2.42 8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.23-8.25 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.18-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.39.11-.51.12-.12.25-.31.37-.46.12-.16.16-.27.25-.45.08-.18.04-.33-.04-.46-.08-.12-.55-1.33-.76-1.82-.2-.48-.41-.42-.56-.42-.14-.01-.31-.01-.47-.01-.17 0-.43.06-.66.31-.23.25-.88.86-.88 2.09 0 1.24.9 2.44 1.03 2.6.12.17 1.71 2.61 4.15 3.56 2.43.95 2.43.63 2.87.6.43-.04 1.47-.6 1.68-1.18.2-.58.2-1.07.14-1.18-.06-.1-.23-.16-.48-.28Z"/></svg>',
 }
 
 SKILLS = [
@@ -1153,18 +1279,20 @@ st.markdown(f"""
       <p class="hero-bio">{PROFILE['bio']}</p>
       <div class="hero-links">
         <a href="{PROFILE['linkedin']}" target="_blank" class="btn-primary">
-          🔗 LinkedIn
+          <span class="btn-ico">{ICONS['linkedin']}</span>LinkedIn
         </a>
         <a href="{PROFILE['github']}" target="_blank" class="btn-outline">
-          💻 GitHub
+          <span class="btn-ico">{ICONS['github']}</span>GitHub
         </a>
         <a href="mailto:{PROFILE['email']}" class="btn-outline">
-          ✉️ Contato
+          <span class="btn-ico">{ICONS['mail']}</span>Contato
         </a>
       </div>
     </div>
     <div>
-      <img src="{PROFILE['avatar']}" class="hero-avatar" alt="Gian Henrique" loading="lazy" />
+      <div class="hero-avatar-wrap">
+        <img src="{PROFILE['avatar']}" class="hero-avatar" alt="Gian Henrique" loading="lazy" />
+      </div>
     </div>
   </div>
 </section>
@@ -1196,28 +1324,24 @@ st.markdown("""
 # ─────────────────────────────────────────
 # STATS (números de impacto)
 # ─────────────────────────────────────────
-st.markdown("""
-<div class="section">
-  <div class="stats-grid">
-    <div class="stat-card">
-      <span class="stat-number">1M+</span>
-      <div class="stat-label">Registros processados</div>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">6</span>
-      <div class="stat-label">Módulos analíticos entregues</div>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">100%</span>
-      <div class="stat-label">Python open source</div>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">26 MB</span>
-      <div class="stat-label">de 350 MB (otimização ETL)</div>
-    </div>
-  </div>
+STATS = [
+    {"icon": "database", "number": "1M+", "label": "Registros processados"},
+    {"icon": "gear", "number": "6", "label": "Módulos analíticos entregues"},
+    {"icon": "code", "number": "100%", "label": "Python open source"},
+    {"icon": "zap", "number": "26 MB", "label": "de 350 MB (otimização ETL)"},
+]
+
+stats_html = '<div class="section"><div class="stats-grid">'
+for s in STATS:
+    stats_html += f"""
+<div class="stat-card">
+  <span class="stat-icon">{ICONS[s['icon']]}</span>
+  <span class="stat-number">{s['number']}</span>
+  <div class="stat-label">{s['label']}</div>
 </div>
-""", unsafe_allow_html=True)
+""".strip()
+stats_html += "</div></div>"
+st.markdown(stats_html, unsafe_allow_html=True)
 
 st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
@@ -1271,25 +1395,25 @@ with col_chart:
         r=values + [values[0]],
         theta=categories + [categories[0]],
         fill="toself",
-        fillcolor="rgba(99,102,241,0.18)",
-        line=dict(color="#6366F1", width=2.5),
+        fillcolor="rgba(232,134,125,0.18)",
+        line=dict(color=COLORS["accent"], width=2.5),
         name="Nível",
         hovertemplate="%{theta}: %{r}%<extra></extra>",
     ))
 
     fig.update_layout(
         polar=dict(
-            bgcolor="rgba(26,26,46,0.8)",
+            bgcolor="rgba(20,18,16,0.8)",
             radialaxis=dict(
                 visible=True, range=[0, 100],
-                gridcolor="#2D2D4E",
-                tickcolor="#2D2D4E",
-                tickfont=dict(color="#64748B", size=10),
+                gridcolor=COLORS["border"],
+                tickcolor=COLORS["border"],
+                tickfont=dict(color=COLORS["text_3"], size=10),
                 tickvals=[25, 50, 75, 100],
             ),
             angularaxis=dict(
-                gridcolor="#2D2D4E",
-                tickfont=dict(color="#94A3B8", size=13),
+                gridcolor=COLORS["border"],
+                tickfont=dict(color=COLORS["text_2"], size=13),
             ),
         ),
         paper_bgcolor="rgba(0,0,0,0)",
@@ -1305,12 +1429,12 @@ with col_tags:
     for cat in SKILLS:
         tags_html = "".join(f'<span class="skill-tag">{t}</span>' for t in cat["tags"])
         skills_html += f"""
-        <div class="skill-category">
-          <span class="skill-cat-icon">{ICONS[cat['icon']]}</span>
-          <div class="skill-cat-title">{cat['title']}</div>
-          {tags_html}
-        </div>
-        """
+<div class="skill-category">
+  <span class="skill-cat-icon">{ICONS[cat['icon']]}</span>
+  <div class="skill-cat-title">{cat['title']}</div>
+  {tags_html}
+</div>
+""".strip()
     skills_html += "</div>"
     st.markdown(skills_html, unsafe_allow_html=True)
 
@@ -1321,17 +1445,17 @@ with col_tags:
 # fechá-la só numa chamada seguinte não funciona (as divs órfãs de uma
 # chamada não “casam” com fechamentos de outra), o que fazia o HTML aparecer
 # como texto bruto na tela.
-cards_html = """
+cards_html = f"""
 <div class="section-alt" style="padding-top:0">
   <div class="section-inner">
-    <h3 style="color:#E2E8F0;font-size:18px;font-weight:600;margin:8px 0 4px">Power BI na Prática</h3>
-    <p style="color:#64748B;font-size:14px;margin-bottom:0">Experiências reais compartilhadas no LinkedIn.</p>
+    <h3 style="color:{COLORS['text_1']};font-size:18px;font-weight:600;margin:8px 0 4px">Power BI na Prática</h3>
+    <p style="color:{COLORS['text_3']};font-size:14px;margin-bottom:0">Experiências reais compartilhadas no LinkedIn.</p>
     <div class="linkedin-grid">
 """
 for item in POWERBI_HIGHLIGHTS:
     tags_html = "".join(f'<span class="skill-tag">{t}</span>' for t in item["tags"])
     steps_html = (
-        '<ol style="padding-left:18px;margin:0 0 14px;color:#94A3B8;font-size:12px;line-height:1.7">'
+        f'<ol style="padding-left:18px;margin:0 0 14px;color:{COLORS["text_2"]};font-size:12px;line-height:1.7">'
         + "".join(f"<li>{s}</li>" for s in item["steps"])
         + "</ol>"
         if item["steps"] else ""
@@ -1344,15 +1468,15 @@ for item in POWERBI_HIGHLIGHTS:
         f'<span class="linkedin-card-link-icon">{ICONS["bot"]}</span>Aplicação prática contínua</span>'
     )
     cards_html += f"""
-    <div class="linkedin-card">
-      <span class="skill-cat-icon">{ICONS[item['icon']]}</span>
-      <div class="linkedin-card-title">{item['title']}</div>
-      <div class="linkedin-card-desc">{item['desc']}</div>
-      {steps_html}
-      <div class="linkedin-card-tags">{tags_html}</div>
-      {link_html}
-    </div>
-    """
+<div class="linkedin-card">
+  <span class="skill-cat-icon">{ICONS[item['icon']]}</span>
+  <div class="linkedin-card-title">{item['title']}</div>
+  <div class="linkedin-card-desc">{item['desc']}</div>
+  {steps_html}
+  <div class="linkedin-card-tags">{tags_html}</div>
+  {link_html}
+</div>
+""".strip()
 cards_html += "</div></div></div>"
 st.markdown(cards_html, unsafe_allow_html=True)
 
@@ -1377,7 +1501,7 @@ for proj_idx, proj in enumerate(PROJECTS):
         for m in proj["metrics"]
     )
     tech_html = "".join(f'<span class="tech-tag">{t}</span>' for t in proj["tech"])
-    hl_html = "".join(f'<li style="color:#94A3B8;font-size:14px;margin-bottom:6px;line-height:1.6">{h}</li>' for h in proj["highlights"])
+    hl_html = "".join(f'<li style="color:{COLORS["text_2"]};font-size:14px;margin-bottom:6px;line-height:1.6">{h}</li>' for h in proj["highlights"])
     badge_class = "project-badge finalizado" if proj["status"].lower() == "finalizado" else "project-badge"
     toggle_id = f"ver-mais-{proj_idx}"
 
@@ -1394,7 +1518,7 @@ for proj_idx, proj in enumerate(PROJECTS):
         <div class="project-body">
           <div class="project-metrics">{metrics_html}</div>
           <div style="margin-top:20px">
-            <div style="font-size:13px;color:#64748B;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Destaques técnicos</div>
+            <div style="font-size:13px;color:{COLORS['text_3']};font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Destaques técnicos</div>
             <ul style="padding-left:18px;margin:0">{hl_html}</ul>
           </div>
           <div class="project-tech">{tech_html}</div>
@@ -1405,12 +1529,12 @@ for proj_idx, proj in enumerate(PROJECTS):
     """, unsafe_allow_html=True)
 
 # Gráfico demo do projeto (dados simulados tipo PRF)
-st.markdown("""
+st.markdown(f"""
 <div class="section-alt">
   <div class="section-inner">
     <div class="section-label">Projeto em Ação</div>
-    <h3 style="color:#F1F5F9;font-size:22px;font-weight:600;margin-bottom:4px">Prévia: Acidentes PRF 2022–2025</h3>
-    <p style="color:#64748B;font-size:14px;margin-bottom:24px">Visualizações representativas do dashboard executivo.</p>
+    <h3 style="color:{COLORS['text_1']};font-size:22px;font-weight:600;margin-bottom:4px">Prévia: Acidentes PRF 2022–2025</h3>
+    <p style="color:{COLORS['text_3']};font-size:14px;margin-bottom:24px">Visualizações representativas do dashboard executivo.</p>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -1425,23 +1549,23 @@ with col1:
     fig2 = go.Figure()
     fig2.add_trace(go.Bar(
         x=anos, y=acidentes, name="Acidentes",
-        marker_color="#6366F1",
+        marker_color=COLORS["neutral_bar"],
         hovertemplate="%{x}: %{y:,.0f} acidentes<extra></extra>",
     ))
     fig2.add_trace(go.Scatter(
         x=anos, y=mortos, name="Óbitos",
         yaxis="y2", mode="lines+markers",
-        line=dict(color="#F43F5E", width=3),
+        line=dict(color=COLORS["accent"], width=3),
         marker=dict(size=8),
         hovertemplate="%{x}: %{y:,.0f} óbitos<extra></extra>",
     ))
     fig2.update_layout(
-        title=dict(text="Evolução Anual — Acidentes e Óbitos", font=dict(color="#E2E8F0", size=15)),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(26,26,46,0.6)",
-        xaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B")),
-        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B"), title="Acidentes"),
-        yaxis2=dict(overlaying="y", side="right", tickfont=dict(color="#F43F5E"), title="Óbitos"),
-        legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#94A3B8")),
+        title=dict(text="Evolução Anual — Acidentes e Óbitos", font=dict(color=COLORS["text_1"], size=15)),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(20,18,16,0.6)",
+        xaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_3"])),
+        yaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_3"]), title="Acidentes"),
+        yaxis2=dict(overlaying="y", side="right", tickfont=dict(color=COLORS["accent_light"]), title="Óbitos"),
+        legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color=COLORS["text_2"])),
         margin=dict(l=10, r=10, t=48, b=10),
         height=320,
     )
@@ -1455,18 +1579,18 @@ with col2:
         x=valores, y=causas, orientation="h",
         marker=dict(
             color=valores,
-            colorscale=[[0, "#2D2D4E"], [1, "#6366F1"]],
+            colorscale=[[0, COLORS["border"]], [1, COLORS["accent"]]],
         ),
         hovertemplate="%{y}: %{x}%<extra></extra>",
         text=[f"{v}%" for v in valores],
         textposition="outside",
-        textfont=dict(color="#94A3B8", size=12),
+        textfont=dict(color=COLORS["text_2"], size=12),
     ))
     fig3.update_layout(
-        title=dict(text="Top 5 Causas de Acidentes (%)", font=dict(color="#E2E8F0", size=15)),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(26,26,46,0.6)",
-        xaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B"), showticklabels=False),
-        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#94A3B8")),
+        title=dict(text="Top 5 Causas de Acidentes (%)", font=dict(color=COLORS["text_1"], size=15)),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(20,18,16,0.6)",
+        xaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_3"]), showticklabels=False),
+        yaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_2"])),
         margin=dict(l=10, r=60, t=48, b=10),
         height=320,
     )
@@ -1475,12 +1599,12 @@ with col2:
 st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
 # Resultado do projeto SUS — ilustração baseada na documentação (etapas 5 e 6 do projeto)
-st.markdown("""
+st.markdown(f"""
 <div class="section-alt">
   <div class="section-inner">
     <div class="section-label">Projeto em Ação</div>
-    <h3 style="color:#F1F5F9;font-size:22px;font-weight:600;margin-bottom:4px">Resultado: Envelhecimento Populacional e Impactos no SUS</h3>
-    <p style="color:#64748B;font-size:14px;margin-bottom:24px">Ilustração baseada nas etapas de Análise dos Resultados e Otimização documentadas no projeto — valores representativos da metodologia aplicada.</p>
+    <h3 style="color:{COLORS['text_1']};font-size:22px;font-weight:600;margin-bottom:4px">Resultado: Envelhecimento Populacional e Impactos no SUS</h3>
+    <p style="color:{COLORS['text_3']};font-size:14px;margin-bottom:24px">Ilustração baseada nas etapas de Análise dos Resultados e Otimização documentadas no projeto — valores representativos da metodologia aplicada.</p>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -1493,17 +1617,17 @@ with col_sus1:
 
     fig4 = go.Figure(go.Bar(
         x=faixas, y=proporcao,
-        marker_color="#F43F5E",
+        marker_color=COLORS["accent"],
         hovertemplate="%{x}: %{y}% dos óbitos<extra></extra>",
         text=[f"{v}%" for v in proporcao],
         textposition="outside",
-        textfont=dict(color="#94A3B8", size=12),
+        textfont=dict(color=COLORS["text_2"], size=12),
     ))
     fig4.update_layout(
-        title=dict(text="Distribuição de Óbitos por Faixa Etária 60+ (%)", font=dict(color="#E2E8F0", size=14)),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(26,26,46,0.6)",
-        xaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#94A3B8")),
-        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B"), showticklabels=False),
+        title=dict(text="Distribuição de Óbitos por Faixa Etária 60+ (%)", font=dict(color=COLORS["text_1"], size=14)),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(20,18,16,0.6)",
+        xaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_2"])),
+        yaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_3"]), showticklabels=False),
         margin=dict(l=10, r=10, t=48, b=10),
         height=320,
     )
@@ -1515,17 +1639,17 @@ with col_sus2:
 
     fig5 = go.Figure(go.Bar(
         x=relevancia, y=bases, orientation="h",
-        marker=dict(color=relevancia, colorscale=[[0, "#2D2D4E"], [1, "#6366F1"]]),
+        marker=dict(color=relevancia, colorscale=[[0, COLORS["border"]], [1, COLORS["accent"]]]),
         hovertemplate="%{y}: relevância %{x}<extra></extra>",
         text=[f"{v}" for v in relevancia],
         textposition="outside",
-        textfont=dict(color="#94A3B8", size=12),
+        textfont=dict(color=COLORS["text_2"], size=12),
     ))
     fig5.update_layout(
-        title=dict(text="Principal Determinante por Base de Dados", font=dict(color="#E2E8F0", size=14)),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(26,26,46,0.6)",
-        xaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#64748B"), showticklabels=False),
-        yaxis=dict(gridcolor="#2D2D4E", tickfont=dict(color="#94A3B8", size=11), automargin=True),
+        title=dict(text="Principal Determinante por Base de Dados", font=dict(color=COLORS["text_1"], size=14)),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(20,18,16,0.6)",
+        xaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_3"]), showticklabels=False),
+        yaxis=dict(gridcolor=COLORS["border"], tickfont=dict(color=COLORS["text_2"], size=11), automargin=True),
         margin=dict(l=10, r=50, t=48, b=10),
         height=320,
     )
@@ -1538,12 +1662,12 @@ st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 # EXPERIÊNCIA
 # ─────────────────────────────────────────
 st.markdown('<div id="experiencia"></div>', unsafe_allow_html=True)
-st.markdown("""
+st.markdown(f"""
 <div class="section">
   <div class="section-label">Trajetória</div>
   <h2 class="section-title">Experiência & Formação</h2>
   <p class="section-subtitle">Construindo expertise através de cargos administrativos com foco em dados e formação acadêmica sólida.</p>
-  <h3 style="color:#E2E8F0;font-size:18px;font-weight:600;margin-bottom:20px">Experiência Profissional</h3>
+  <h3 style="color:{COLORS['text_1']};font-size:18px;font-weight:600;margin-bottom:20px">Experiência Profissional</h3>
   <div class="timeline">
 """, unsafe_allow_html=True)
 
@@ -1557,9 +1681,9 @@ for exp in EXPERIENCE:
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown("""
+st.markdown(f"""
   </div>
-  <h3 style="color:#E2E8F0;font-size:18px;font-weight:600;margin:16px 0 20px">Formação Acadêmica</h3>
+  <h3 style="color:{COLORS['text_1']};font-size:18px;font-weight:600;margin:16px 0 20px">Formação Acadêmica</h3>
   <div class="timeline">
 """, unsafe_allow_html=True)
 
@@ -1589,28 +1713,28 @@ st.markdown(f"""
     <p class="section-subtitle">Aberto a oportunidades de analista de dados, BI e engenharia de dados.</p>
     <div class="contact-grid">
       <a href="mailto:{PROFILE['email']}" class="contact-card">
-        <div class="contact-icon">✉️</div>
+        <div class="contact-icon">{ICONS['mail']}</div>
         <div>
           <div class="contact-label">E-mail</div>
           <div class="contact-value">{PROFILE['email']}</div>
         </div>
       </a>
       <a href="{PROFILE['linkedin']}" target="_blank" class="contact-card">
-        <div class="contact-icon">🔗</div>
+        <div class="contact-icon">{ICONS['linkedin']}</div>
         <div>
           <div class="contact-label">LinkedIn</div>
           <div class="contact-value">linkedin.com/in/gian-henrique</div>
         </div>
       </a>
       <a href="{PROFILE['github']}" target="_blank" class="contact-card">
-        <div class="contact-icon">💻</div>
+        <div class="contact-icon">{ICONS['github']}</div>
         <div>
           <div class="contact-label">GitHub</div>
           <div class="contact-value">github.com/GianHQA</div>
         </div>
       </a>
       <a href="https://wa.me/5531995560604" class="contact-card">
-        <div class="contact-icon">📱</div>
+        <div class="contact-icon">{ICONS['whatsapp']}</div>
         <div>
           <div class="contact-label">WhatsApp / Localização</div>
           <div class="contact-value">Brasil 🇧🇷</div>
